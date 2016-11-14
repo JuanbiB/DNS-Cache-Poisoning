@@ -13,15 +13,16 @@ public class Client {
 
 	// Returns the IP address associated with the domain 
 	public int Visit(String domain){
-		// first check cache to see if answer is already in there
+		/* first check cache to see if answer is already in there */
 		if (domainIP_.containsKey(domain)){
 			return domainIP_.get(domain);
 		}
 		
+		/* Else have to ask the DNS server for a response */	
 		// Build Request object
 		Request req = new Request(domain);
 		
-		// Else have to ask the DNS server for a response
+		// Send object and store response
 		Response answer = dns_.SendRequest(req);
 		
 		// Update TTL 
