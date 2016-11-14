@@ -1,9 +1,10 @@
 import java.util.*;
 public class Client {
 	
+	// Class variables should end with an underscore
 	private DNS dns_;
-	private Map<String, Integer> domainIP;
-	private int TTL; 
+	private Map<String, Integer> domainIP_;
+	private int TTL_; 
 	
 	// Constructor 
 	public Client(DNS dns) {
@@ -13,25 +14,28 @@ public class Client {
 	// Returns the IP address associated with the domain 
 	public int Visit(String domain){
 		// first check cache to see if answer is already in there
-		if (domainIP.containsKey(domain)){
-			return domainIP.get(domain);
+		if (domainIP_.containsKey(domain)){
+			return domainIP_.get(domain);
 		}
 		
-		// else have to ask the DNS server for a response
-		Response answer = dns_.SendRequest(Request req);
+		// Build Request object
+		Request req = new Request(domain);
 		
-		// update TTL 
-		TTL = answer.TTL();
+		// Else have to ask the DNS server for a response
+		Response answer = dns_.SendRequest(req);
+		
+		// Update TTL 
+		TTL_ = answer.TTL();
 		
 		// clear the cache of whatever was in it and put new value
-		domainIP.clear();
-		domainIP.put(domain, answer.ip());
+		domainIP_.clear();
+		domainIP_.put(domain, answer.ip());
 	}
 	
 	// To be called periodically to clear cache if TTL has expired
 	void Clear(){
-		if (TTL <= 0){
-			domainIP.clear();
+		if (TTL_ <= 0){
+			domainIP_.clear();
 		}
 	}
 }
