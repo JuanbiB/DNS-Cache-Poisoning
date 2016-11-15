@@ -3,8 +3,7 @@ public class Client {
 	
 	// Class variables should end with an underscore
 	private DNS dns_;
-	private Map<String, Integer> domainIP_;
-	private int TTL_; 
+	private Cache cache_;
 	
 	// Constructor 
 	public Client(DNS dns) {
@@ -23,20 +22,20 @@ public class Client {
 		Request req = new Request(domain);
 		
 		// Send object and store response
-		Response answer = dns_.SendRequest(req);
-		
-		// Update TTL 
-		TTL_ = answer.TTL();
+		Response answer = dns_.Answer(req);
 		
 		// clear the cache of whatever was in it and put new value
-		domainIP_.clear();
-		domainIP_.put(domain, answer.ip());
+		cache_.clear();
+		cache_.domain = domain;
+		cache_.ip = answer.ip();
+		cache_.TTL = answer.TTL();
 	}
 	
 	// To be called periodically to clear cache if TTL has expired
 	void Clear(){
-		if (TTL_ <= 0){
-			domainIP_.clear();
+		if (cache_ <= 0){
+			cache_.clear();
 		}
 	}
+	
 }
