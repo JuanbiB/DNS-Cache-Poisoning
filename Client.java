@@ -1,41 +1,29 @@
 import java.util.*;
 public class Client {
 	
-	// Class variables should end with an underscore
 	private DNS dns_;
 	private Cache cache_;
 	
-	// Constructor 
 	public Client(DNS dns) {
 		dns_ = dns;
+		cache_ = new Cache();
 	}
 
-	// Returns the IP address associated with the domain 
-	public int Visit(String domain){
-		/* first check cache to see if answer is already in there */
-		if (domainIP_.containsKey(domain)){
-			return domainIP_.get(domain);
+	/* 
+	 * Returns the IP address associated with the domain 
+	 */
+	public int Visit(String[] query){
+		// First check cache to see if answer is already in there 
+		if (cache_.checkEntry(query)){
+			return cache_.lookupEntry(query);
 		}
 		
-		/* Else have to ask the DNS server for a response */	
-		// Build Request object
-		Request req = new Request(domain);
+		// Else have to ask the DNS server for a response 
+		Message req = new Message(query);
+		Message answer = dns_.Answer(req);
 		
-		// Send object and store response
-		Response answer = dns_.Answer(req);
-		
-		// clear the cache of whatever was in it and put new value
-		cache_.clear();
-		cache_.domain = domain;
-		cache_.ip = answer.ip();
-		cache_.TTL = answer.TTL();
-	}
-	
-	// To be called periodically to clear cache if TTL has expired
-	void Clear(){
-		if (cache_ <= 0){
-			cache_.clear();
-		}
+		// Add entry to cache
+		cache_.addEntry(query, answer.ip(), answer.TTL());
 	}
 	
 }
