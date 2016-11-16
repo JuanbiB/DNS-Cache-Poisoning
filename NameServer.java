@@ -56,10 +56,19 @@ public class NameServer implements Node {
 	}
 
 	private boolean rightServer(String[] query) {
-		for (int i = query.length - 1; i >= 0; i--) {
-			if (i > type.length || !type[i].equals(query[i])) {
+		if (type.length > query.length) {
+			return false;
+		}
+		
+		int typeIndex = type.length - 1;
+		int queryIndex = query.length - 1;
+		
+		while (queryIndex >= 0) {
+			if (!query[queryIndex].equals(type[typeIndex])) {
 				return false;
 			}
+			typeIndex--;
+			queryIndex--;
 		}
 		return true;
 	}
@@ -74,13 +83,7 @@ public class NameServer implements Node {
 	}
 
 	private boolean matches(String[] query) {
-		for (int i = query.length - 1; i >= 0; i--) {
-			if (i < type.length || !type[i].equals(query[i])) {
-				return false;
-			}
-		}
-		
-		return true;
+		return rightServer(query) && query.length == type.length;
 	}
 	
 }
