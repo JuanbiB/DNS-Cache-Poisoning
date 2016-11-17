@@ -1,29 +1,52 @@
 import java.util.*;
-public class Client {
+public class Client implements Node {
+    
+    private DNS dns_;
+    private Cache cache_;
+    private String address; 
 	
-	private DNS dns_;
-	private Cache cache_;
-	
-	public Client(DNS dns) {
-		dns_ = dns;
-		cache_ = new Cache();
+    public Client(DNS dns, String address) {
+	this.dns_ = dns;
+	this.cache_ = new Cache();
+	this.address = address; 
+    }
+
+    /* 
+     * Handles answer from the DNS server 
+     */
+    @Override 
+    public void message(Node src, Message message){
+	// Check that this is indeed a final answer from the DNS
+	if (message.getType() == MessageTypes.FINAL){
+	    // Add entry to cache
+	    cache_.addEntry(message.getQuery(), message.getAnswer());
+	}
+	else {
+	    return 
+	}
+    }
+
+    /*
+     * Makes request for the IP address associated with the domain 
+     * Sleeps until it has received an answer
+     */
+    public String makeRequest(String[] query){
+	// Check cache first of all
+	if (cache_.containsEntry(query)){
+	    return cache_.lookupEntry(query);
 	}
 
-	/* 
-	 * Returns the IP address associated with the domain 
-	 */
-	public int Visit(String[] query){
-		// First check cache to see if answer is already in there 
-		if (cache_.checkEntry(query)){
-			return cache_.lookupEntry(query);
-		}
-		
-		// Else have to ask the DNS server for a response 
-		Message req = new Message(query);
-		Message answer = dns_.Answer(req);
-		
-		// Add entry to cache
-		cache_.addEntry(query, answer.ip(), answer.TTL());
+	// If not in cache, send request and wait for reply
+	Message request = new Message(query);
+	dns_.message(this, request);
+
+	while (true){
+	    Thread.sleep(1000);
+	    if (!cache_.isEmpty()){
+		break;
+	    }
 	}
+    }
 	
 }
+
