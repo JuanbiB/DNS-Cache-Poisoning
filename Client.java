@@ -16,6 +16,10 @@ public class Client implements Node {
      */
     @Override 
     public void message(Node src, Message message){
+	// If our cache isn't empty, then we shut off from receiving messages
+	if (!cache_.isEmpty()){
+	    return 
+	}
 	// Check that this is indeed a final answer from the DNS
 	if (message.getType() == MessageTypes.FINAL){
 	    // Add entry to cache
@@ -35,7 +39,6 @@ public class Client implements Node {
 	if (cache_.containsEntry(query)){
 	    return cache_.lookupEntry(query);
 	}
-
 	// If not in cache, send request and wait for reply
 	Message request = new Message(query);
 	dns_.message(this, request);
