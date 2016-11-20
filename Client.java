@@ -4,7 +4,7 @@ public class Client implements Node {
     private DNS dns_;
     private Cache cache_;
     private String address; 
-	
+    	
     public Client(DNS dns, String address) {
 	this.dns_ = dns;
 	this.cache_ = new Cache();
@@ -18,7 +18,7 @@ public class Client implements Node {
     public void message(Node src, Message message){
 	// If our cache isn't empty, then we shut off from receiving messages
 	if (!cache_.isEmpty()){
-	    return 
+	    return; 
 	}
 	// Check that this is indeed a final answer from the DNS
 	if (message.getType() == MessageTypes.FINAL){
@@ -26,7 +26,7 @@ public class Client implements Node {
 	    cache_.addEntry(message.getQuery(), message.getAnswer());
 	}
 	else {
-	    return 
+	    return;
 	}
     }
 

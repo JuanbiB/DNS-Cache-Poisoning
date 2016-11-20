@@ -7,7 +7,6 @@ public class NameServer implements Node {
 	private String address;
 	private Map<String, NameServer> children;
 	private Set<Node> trustedServers;
-	
 	/*
 	 * Ideally, the simulator will take as input a list of URLs and create the tree structure of name servers
 	 * from the URLs.

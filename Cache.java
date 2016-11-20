@@ -66,7 +66,7 @@ public class Cache {
     /*
      * Checks if an entry is within the cache
      */
-    public String containsEntry(String[] query) {
+    public boolean containsEntry(String[] query) {
 	return cache.containsKey(query);
     }
 
