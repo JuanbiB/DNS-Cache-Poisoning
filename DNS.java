@@ -1,7 +1,8 @@
 import java.util.*;
-public class DNS{
+
+public class DNS implements Node{
     //Instance Variables: Root name server and cache
-    private Name root_;
+    private NameServer root_;
     private Cache cache_;
 
 
@@ -19,10 +20,24 @@ public class DNS{
      * @param domain the domain name to search for
      * @return address address corresponding to the domain parameter
      */
-    public Response Answer(Request req){
-        if (cache_.contains(req)){
-            return cache_.get(req);
+    @Override
+    public void message(Node src, Message message) {
+        if (cache_.containsEntry(message)){
+            src.message(lookupEntry(message));
         }
-        return root_.Answer(req);
+        if (message.getType() == MessageTypes.FINAL){
+            // Add entry to cache
+            // add TXID check
+            if ()
+            cache_.addEntry(message.getQuery(), message.getAnswer());
+            src.message()
+        }
+        if (message.getType()==MessageTypes.WHERE){
+            root_.message(this, message)
+        }
+        if (message.getType()==MessageTypes.TRY){
+            NameServer nextServer = message.getNextServer();
+            nextServer.message(this, new Message(message.getQuery()));
+        }
     }
 }
