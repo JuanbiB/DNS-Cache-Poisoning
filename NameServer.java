@@ -84,7 +84,7 @@ public class NameServer implements Node {
 		
 		// check if we are the final server fot this query
 		if (matches(query)) {
-			src.message(this, new Message(query, address(query)));
+			src.message(this, new Message(query, address(query), message.getTXID()));
 		}
 		
 		// return next server
@@ -93,7 +93,7 @@ public class NameServer implements Node {
 			// skip if not a child
 			return;
 		}
-		src.message(this, new Message(query, children.get(nextServer(query))));
+		src.message(this, new Message(query, children.get(nextServer(query)), message.getTXID()));
 	}
 	
 	private String nextServer(Url query) {
