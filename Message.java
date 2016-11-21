@@ -2,23 +2,23 @@
 public class Message {
 
 	private String type;
-	private String[] query;
+	private Url query;
 	private String answer;
 	private NameServer nextServer;
 	
-	public Message(String[] query, String answer) {
+	public Message(Url query, String answer) {
 		this.type = MessageTypes.FINAL;
 		this.query = query;
 		this.answer = answer;
 	}
 
-	public Message(String[] query, NameServer answer) {
+	public Message(Url query, NameServer answer) {
 		this.type = MessageTypes.TRY;
 		this.query = query;
 		this.nextServer = answer;
 	}
 	
-	public Message(String[] query) {
+	public Message(Url query) {
 		this.type = MessageTypes.WHERE;
 		this.query = query;
 	}
@@ -31,11 +31,11 @@ public class Message {
 		this.type = type;
 	}
 
-	public String[] getQuery() {
+	public Url getQuery() {
 		return query;
 	}
 
-	public void setQuery(String[] query) {
+	public void setQuery(Url query) {
 		this.query = query;
 	}
 
