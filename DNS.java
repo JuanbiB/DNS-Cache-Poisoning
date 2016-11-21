@@ -28,9 +28,8 @@ public class DNS implements Node{
         if (message.getType() == MessageTypes.FINAL){
             // Add entry to cache
             // add TXID check
-            if ()
             cache_.addEntry(message.getQuery(), message.getAnswer());
-            src.message()
+            src.message(this, message)
         }
         if (message.getType()==MessageTypes.WHERE){
             root_.message(this, message)
