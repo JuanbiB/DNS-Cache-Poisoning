@@ -59,14 +59,14 @@ public class Cache {
 	 * Returns the address of the query if it is in the cache,
 	 * null otherwise
 	 */
-	public String lookupEntry(String[] query) {
+	public String lookupEntry(Url query) {
 		return cache.get(query);
 	}
 
 	/*
 	 * Checks if an entry is within the cache
 	 */
-	public boolean containsEntry(String[] query) {
+	public boolean containsEntry(Url query) {
 		return cache.containsKey(query);
 	}
 

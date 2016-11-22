@@ -1,6 +1,7 @@
 public class Message {
 
 	private String type;
+	private Url query;
 	private int TXID;
 	private String answer;
 	private NameServer nextServer;

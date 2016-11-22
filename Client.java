@@ -4,12 +4,10 @@ public class Client implements Node {
     
     private DNS dns_;
     private Cache cache_;
-    private String address; 
     	
     public Client(DNS dns, String address) {
 		this.dns_ = dns;
 		this.cache_ = new Cache();
-		this.address = address; 
     }
 
     /* 
@@ -35,7 +33,7 @@ public class Client implements Node {
      * Makes request for the IP address associated with the domain 
      * Sleeps until it has received an answer
      */
-    public String makeRequest(String[] query){
+    public String makeRequest(Url query) throws InterruptedException{
 		// Check cache first of all
 		if (cache_.containsEntry(query)){
 		    return cache_.lookupEntry(query);
@@ -53,6 +51,8 @@ public class Client implements Node {
 		    	break;
 		    }
 		}
+		// When it breaks out of the loop, it will have received an answer.
+		return cache_.lookupEntry(query);
     }
 	
 }

@@ -11,7 +11,7 @@ public class DNS implements Node{
      * Constructor for DNS server object.
      * @param root the root name server
      */
-    public DNS(Name root) {
+    public DNS(NameServer root) {
         root_ = root;
         cache_ = new Cache();
     }
@@ -23,29 +23,38 @@ public class DNS implements Node{
      */
     @Override
     public void message(Node src, Message message) {
-        if (cache_.containsEntry(message)){
-            src.message(lookupEntry(message));
+    	// If the requested Url is already contained within the cache, send that one back
+        if (cache_.containsEntry(message.getQuery())){
+        	Url query = message.getQuery();
+        	Message toSend = new Message(query, cache_.lookupEntry(query), message.getTXID());
+            src.message(this, toSend);
         }
+        // This is the initial message received by the client	
+        if (message.getType()==MessageTypes.WHERE){
+            this.TXID_ = message.getTXID();
+            this.client_ = src;
+            root_.message(this, message);
+        }
+        // If a NS returns another NS to ask	
+        if (message.getType()==MessageTypes.TRY){
+        	if (message.getTXID()==this.TXID_){
+        		NameServer nextServer = message.getNextServer();
+                nextServer.message(this, new Message(message.getQuery(), this.TXID_));
+            }
+        	else {
+                return;
+            }
+        }
+        // If we get the final answer from the name server, that is, an IP address
         if (message.getType() == MessageTypes.FINAL){
-            // Add entry to cache
-            // add TXID check
+            // Add entry to cache	
             if (message.getTXID()==this.TXID_){
                 this.cache_.addEntry(message.getQuery(), message.getAnswer());
                 this.client_.message(this, message);
             }
         }
-        if (message.getType()==MessageTypes.WHERE){
-            this.TXID_ = message.getTXID();
-            this.client_ = src;
-            root_.message(this, message)
-        }
-        if (message.getType()==MessageTypes.TRY){
-            if (message.getTXID()==this.TXID_){
-                NameServer nextServer = message.getNextServer();
-                nextServer.message(this, new Message(message.getQuery()));
-            }else{
-                return;
-            }
-        }
+
+        
+
     }
 }
