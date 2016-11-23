@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,5 +30,11 @@ public class Simulation {
 		NameServer rootNS = new NameServer(knownWebPages, dnsServers, "128.532.543.645");
 		dns.init(rootNS);
 		this.client = new Client(dns);
+	}
+	
+	public static void main(String[] args) {
+		List<Url> pagesToVisit = new LinkedList<Url>();
+		pagesToVisit.add(new Url("www.oberlin.edu"));
+		new Simulation(pagesToVisit, "addresses.txt");
 	}
 }
