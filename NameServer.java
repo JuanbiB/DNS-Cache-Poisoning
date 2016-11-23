@@ -42,7 +42,6 @@ public class NameServer implements Node {
 		this.cache = new Cache();
 		this.trustedServers = trustedServers;
 		this.address = address;
-			x
 		// build tree
 		for (Url url : urls) {
 			addEntry(url);
