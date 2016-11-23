@@ -18,6 +18,7 @@ public class Simulation {
 		init();
 		
 		for (Url url : pagesToVisit) {
+			System.out.println("visiting: " + url);
 			String result = client.visitWebPage(url);
 			Log.i("IP address for ".concat(url.toString()), result);
 		}
@@ -35,6 +36,6 @@ public class Simulation {
 	public static void main(String[] args) {
 		List<Url> pagesToVisit = new LinkedList<Url>();
 		pagesToVisit.add(new Url("www.oberlin.edu"));
-		new Simulation(pagesToVisit, "addresses.txt");
+		new Simulation(pagesToVisit, "addresses.txt").unfettered();
 	}
 }

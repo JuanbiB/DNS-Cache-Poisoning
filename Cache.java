@@ -13,6 +13,7 @@ public class Cache {
 	 */
 	public Cache() {
 		this.cache = new HashMap<Url, String>();
+		this.ttls = new HashMap<TTL, Url>();
 
 		new Date().getTime();
 

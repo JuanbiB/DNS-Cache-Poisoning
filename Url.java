@@ -9,14 +9,18 @@ public class Url {
 	// will not be set for request URLs
 	private String address;
 	
-	public Url(String line) {
-		String[] parts = line.split(" ");
-		if (parts.length != 2) {
-			Log.e(TAG, "invalid addresses in file");
+	public Url(String url) {
+		this(url, "");
+	}
+	
+	public Url(String url, String address) {
+		this.raw = url;
+		this.url = url.split("\\.");
+		if (raw.equals("")) {
+			this.url = new String[0];
 		}
-		this.address = parts[1];
-		this.url = parts[1].split("\\.");
-		this.first = url.length - 1;
+		this.first = this.url.length - 1;
+		this.address = address;
 	}
 	
 	public String getAddress() {
@@ -43,6 +47,7 @@ public class Url {
 		return raw;
 	}
 
+	// TODO: bounds check
 	public String nextPart(Url query) {
 		return url[url.length - query.length() - 1];
 	}

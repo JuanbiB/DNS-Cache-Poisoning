@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +31,13 @@ public class NameServer implements Node {
 		// read in URLs
 		List<Url> urls = new LinkedList<Url>();
 		while (input.hasNextLine()) {
-			urls.add(new Url(input.next()));
+			String line = input.nextLine();
+			String[] parts = line.split(" "); // TODO error handling
+			urls.add(new Url(parts[0], parts[1]));
 		}
 		
 		// sort the URLS
-		urls.sort(new UrlComparator());
+		//urls.sort(new UrlComparator()); TODO: reset firsts
 		
 		
 		// set instance variables
@@ -42,6 +45,7 @@ public class NameServer implements Node {
 		this.cache = new Cache();
 		this.trustedServers = trustedServers;
 		this.address = address;
+		this.children = new HashMap<String, NameServer>();
 		// build tree
 		for (Url url : urls) {
 			addEntry(url);
@@ -75,6 +79,7 @@ public class NameServer implements Node {
 		this.address = address;
 		this.trustedServers= trustedServers;
 		this.cache = new Cache();
+		this.children = new HashMap<String, NameServer>();
 	}
 	
 	@Override
@@ -83,12 +88,14 @@ public class NameServer implements Node {
 		// skip if not trusted server, invalid message, or wrong name server
 		if (!trustedServers.contains(src) || message.getType() != MessageTypes.WHERE ||
 				!rightServer(query)) {
+			System.out.println("doesn't contain key");
 			return;
 		}
 		
-		// check if we are the final server fot this query
+		// check if we are the final server for this query
 		if (matches(query)) {
 			src.message(this, new Message(query, address(query), message.getTXID()));
+			return;
 		}
 		
 		// return next server
@@ -97,6 +104,7 @@ public class NameServer implements Node {
 			// skip if not a child
 			return;
 		}
+
 		src.message(this, new Message(query, children.get(nextServer(query)), message.getTXID()));
 	}
 	
@@ -109,18 +117,19 @@ public class NameServer implements Node {
 	}
 	
 	private String nextPart(Url query) {
-		return type.nextPart(query);
+		return query.nextPart(type);
 	}
 
 	private boolean rightServer(Url query) {
 		if (type.length() > query.length()) {
+			System.out.println("len");
 			return false;
 		}
 		
 		int typeIndex = type.length() - 1;
 		int queryIndex = query.length() - 1;
 		
-		while (queryIndex >= 0) {
+		while (typeIndex >= 0) {
 			if (!query.get(queryIndex).equals(type.get(typeIndex))) {
 				return false;
 			}

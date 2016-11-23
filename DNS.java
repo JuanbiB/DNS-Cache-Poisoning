@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class DNS implements Node{
     //Instance Variables: Root name server and cache
     private NameServer root_;
@@ -26,6 +24,7 @@ public class DNS implements Node{
      */
     @Override
     public void message(Node src, Message message) {
+    	//System.out.println("Got message: " + message.getType());
     	// If the requested Url is already contained within the cache, send that one back
         if (cache_.containsEntry(message.getQuery())){
         	Url query = message.getQuery();
@@ -56,5 +55,6 @@ public class DNS implements Node{
                 this.client_.message(this, message);
             }
         }
+        //System.out.println("DNS: all done handling message");
     }
 }
