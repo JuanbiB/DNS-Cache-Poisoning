@@ -36,12 +36,13 @@ public class NameServer implements Node {
 		// sort the URLS
 		urls.sort(new UrlComparator());
 		
+		
 		// set instance variables
 		this.type = new Url("");
 		this.cache = new Cache();
 		this.trustedServers = trustedServers;
 		this.address = address;
-		
+			x
 		// build tree
 		for (Url url : urls) {
 			addEntry(url);

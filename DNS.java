@@ -11,9 +11,12 @@ public class DNS implements Node{
      * Constructor for DNS server object.
      * @param root the root name server
      */
-    public DNS(NameServer root) {
-        root_ = root;
+    public DNS() {
         cache_ = new Cache();
+    }
+    
+    public void init(NameServer root){
+    	root_ = root;
     }
 
     /**
