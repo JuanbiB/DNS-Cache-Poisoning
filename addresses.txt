@@ -1,0 +1,6 @@
+www.oberlin.edu 192.168.1.1
+www.example.com 189.111.12.2
+www.facebook.com 192.166.2.2
+www.iamcool.com 255.522.3.2
+www.juanbi.com 123.567.8.9
+www.gamescapuder.com 133.132.3.3
