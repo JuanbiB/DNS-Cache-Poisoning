@@ -16,8 +16,8 @@ public class Simulation {
 	public void unfettered() {
 		init();
 		
-		for (Url url : urls) {
-			client.visitWebPage(url);
+		for (Url url : pagesToVisit) {
+			String result = client.visitWebPage(url);
 		}
 	}
 

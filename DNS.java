@@ -53,8 +53,5 @@ public class DNS implements Node{
                 this.client_.message(this, message);
             }
         }
-
-        
-
     }
 }

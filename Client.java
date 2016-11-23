@@ -9,6 +9,20 @@ public class Client implements Node {
 		this.dns_ = dns;
 		this.cache_ = new Cache();
     }
+    
+    /**
+     * Sends request to visit message and waits for answer
+     */
+    
+    public String visitWebPage(Url query){
+    	String address = cache_.lookupEntry(query);
+    	while (address == null){
+    		makeRequest(query);
+    		address = cache_.lookupEntry(query);
+    	}
+    	
+    	return address;
+    }
 
     /* 
      * Handles answer from the DNS server 
@@ -31,29 +45,14 @@ public class Client implements Node {
 
     /*
      * Makes request for the IP address associated with the domain 
-     * Sleeps until it has received an answer
      */
-    public String makeRequest(Url query) throws InterruptedException{
-		// Check cache first of all
-		if (cache_.containsEntry(query)){
-		    return cache_.lookupEntry(query);
-		}
+    public void makeRequest(Url query){
 		// If not in cache, send request and wait for reply
 		Random rand = new Random();
 		int TXID = rand.nextInt(1001) + 5000;
 		
 		Message request = new Message(query, TXID);
 		dns_.message(this, request);
-
-		while (true){
-		    Thread.sleep(1000);
-		    if (!cache_.isEmpty()){
-		    	break;
-		    }
-		}
-		// When it breaks out of the loop, it will have received an answer.
-		return cache_.lookupEntry(query);
     }
-	
 }
 
