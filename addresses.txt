@@ -1,4 +1,5 @@
 www.oberlin.edu 192.168.1.1
+www.otherandomuniversity.edu 182.167.1.1
 www.example.com 189.111.12.2
 www.facebook.com 192.166.2.2
 www.iamcool.com 255.522.3.2
