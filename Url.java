@@ -1,14 +1,26 @@
 
 public class Url {
 
+	private static final String TAG = "Url";
 	private String raw;
 	private String[] url;
 	private int first;
+	// only for the purpose of building name servers, not dns resolution
+	// will not be set for request URLs
+	private String address;
 	
-	public Url(String raw) {
-		this.raw = raw;
-		this.url = raw.split("\\.");
+	public Url(String line) {
+		String[] parts = line.split(" ");
+		if (parts.length != 2) {
+			Log.e(TAG, "invalid addresses in file");
+		}
+		this.address = parts[1];
+		this.url = parts[1].split("\\.");
 		this.first = url.length - 1;
+	}
+	
+	public String getAddress() {
+		return address;
 	}
 	
 	public boolean isEmpty() {
@@ -48,6 +60,10 @@ public class Url {
 
 	public String getRaw() {
 		return raw;
+	}
+
+	public boolean isFinished() {
+		return first < 0;
 	}
 
 }

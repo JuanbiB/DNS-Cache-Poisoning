@@ -49,6 +49,10 @@ public class NameServer implements Node {
 	}
 	
 	private void addEntry(Url url) {
+		if (url.isFinished()) {
+			this.address = url.getAddress();
+			return;
+		}
 		String first = url.first();
 		if (children.containsKey(first)) {
 			url.removeFirst();
