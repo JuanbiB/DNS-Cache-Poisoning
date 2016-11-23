@@ -5,7 +5,7 @@ public class Client implements Node {
     private DNS dns_;
     private Cache cache_;
     	
-    public Client(DNS dns, String address) {
+    public Client(DNS dns) {
 		this.dns_ = dns;
 		this.cache_ = new Cache();
     }

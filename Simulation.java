@@ -18,15 +18,17 @@ public class Simulation {
 		
 		for (Url url : pagesToVisit) {
 			String result = client.visitWebPage(url);
+			Log.i("IP address for ".concat(url.toString()), result);
 		}
 	}
 
 	private void init() {
-		DNSServer dns = new DNSServer();
+		DNS dns = new DNS();
 		Set<Node> dnsServers = new HashSet<Node>();
 		dnsServers.add(dns);
+		
 		NameServer nameServer = new NameServer(knownWebPages, dnsServers, "128.532.543.645");
-		DNSServer dnsServer = new DNSServer(nameServer);
+		DNS dnsServer = new DNS(nameServer);
 		this.client = new Client(dnsServer);
 	}
 }
