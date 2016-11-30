@@ -35,11 +35,7 @@ public class NameServer implements Node {
 			String[] parts = line.split(" "); // TODO error handling
 			urls.add(new Url(parts[0], parts[1]));
 		}
-		
-		// sort the URLS
-		//urls.sort(new UrlComparator()); TODO: reset firsts
-		
-		
+
 		// set instance variables
 		this.type = new Url("");
 		this.cache = new Cache();

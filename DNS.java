@@ -2,7 +2,7 @@ public class DNS implements Node{
     //Instance Variables: Root name server and cache
     private NameServer root_;
     private Cache cache_;
-    private int TXID_;
+    private String TXID_;
     private Node client_;
 
     /**
@@ -50,7 +50,7 @@ public class DNS implements Node{
         // If we get the final answer from the name server, that is, an IP address
         if (message.getType() == MessageTypes.FINAL){
             // Add entry to cache	
-            if (message.getTXID()==this.TXID_){
+            if (message.getTXID().equals(this.TXID_)){
                 this.cache_.addEntry(message.getQuery(), message.getAnswer());
                 this.client_.message(this, message);
             }

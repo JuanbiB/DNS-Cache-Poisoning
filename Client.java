@@ -49,7 +49,7 @@ public class Client implements Node {
     public void makeRequest(Url query){
 		// If not in cache, send request and wait for reply
 		Random rand = new Random();
-		int TXID = rand.nextInt(1001) + 5000;
+		String TXID = Txid.genTxid();
 		
 		Message request = new Message(query, TXID);
 		dns_.message(this, request);
