@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 
 public class Url {
 
@@ -63,12 +65,12 @@ public class Url {
 		return url[i];
 	}
 
-	public String getRaw() {
-		return raw;
-	}
-
 	public boolean isFinished() {
 		return first < 0;
+	}
+	
+	public String getRaw(){
+		return raw;
 	}
 
 }

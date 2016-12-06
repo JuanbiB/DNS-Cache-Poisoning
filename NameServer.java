@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class NameServer implements Node {
+	private static final String TAG = "NameServer";	
 	private Url type;
 	private Cache cache;
 	private String address;
@@ -80,7 +81,15 @@ public class NameServer implements Node {
 	
 	@Override
 	public void message(Node src, Message message) {
+		try {
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Url query = message.getQuery();
+		Log.i(TAG, "Received message to search up: " + query.toString());
 		// skip if not trusted server, invalid message, or wrong name server
 		if (!trustedServers.contains(src) || message.getType() != MessageTypes.WHERE ||
 				!rightServer(query)) {
@@ -96,6 +105,7 @@ public class NameServer implements Node {
 		
 		// return next server
 		String nextServer = nextServer(query);
+		Log.i(TAG, "Next server to search: " + nextServer);
 		if (!children.containsKey(nextServer)) {
 			// skip if not a child
 			return;

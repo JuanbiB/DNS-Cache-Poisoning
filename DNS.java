@@ -1,5 +1,6 @@
 public class DNS implements Node{
     //Instance Variables: Root name server and cache
+	private static final String TAG = "DNS";	
     private NameServer root_;
     private Cache cache_;
     private String TXID_;
@@ -24,6 +25,15 @@ public class DNS implements Node{
      */
     @Override
     public void message(Node src, Message message) {
+    	try {
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	Log.i(TAG, "Received a message of type: " + message.getType());
+    	
     	//System.out.println("Got message: " + message.getType());
     	// If the requested Url is already contained within the cache, send that one back
         if (cache_.containsEntry(message.getQuery())){
