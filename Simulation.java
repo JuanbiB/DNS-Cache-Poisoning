@@ -36,6 +36,7 @@ public class Simulation {
 		List<Url> pagesToVisit = new LinkedList<Url>();
 		pagesToVisit.add(new Url("www.oberlin.edu"));
 		new Simulation(pagesToVisit, "addresses.txt").unfettered();
+		System.out.println("---------- Unfettered Simulation End -------");
 		
 		System.out.println("---------- Cache Poisoning Simulation ----------");
 	}

@@ -34,7 +34,6 @@ public class DNS implements Node{
     	
     	Log.i(TAG, "Received a message of type: " + message.getType());
     	
-    	//System.out.println("Got message: " + message.getType());
     	// If the requested Url is already contained within the cache, send that one back
         if (cache_.containsEntry(message.getQuery())){
         	Url query = message.getQuery();
@@ -61,6 +60,8 @@ public class DNS implements Node{
         if (message.getType() == MessageTypes.FINAL){
             // Add entry to cache	
             if (message.getTXID().equals(this.TXID_)){
+            	Log.i(TAG, "Adding the following to cache: " + "{" + message.getQuery() + 
+            			":" + message.getAnswer() + "}");
                 this.cache_.addEntry(message.getQuery(), message.getAnswer());
                 this.client_.message(this, message);
             }
