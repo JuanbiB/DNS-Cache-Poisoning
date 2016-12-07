@@ -11,6 +11,9 @@ public class Url {
 	// will not be set for request URLs
 	private String address;
 	
+	// a malicious address for use by an attacker
+	public static final String MALICIOUS_ADDRESS = "342.532.343.235";
+	
 	public Url(String url) {
 		this(url, "");
 	}
