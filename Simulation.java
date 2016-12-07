@@ -34,6 +34,7 @@ public class Simulation {
 		
 		for (Url url : pagesToVisit) {
 			String answer = client.visitWebPage(url);
+			System.out.println("\tClient received successful IP!");
 			if (!answer.equals(url.getAddress())){
 				Log.i("Simulation", "Cache has been poisoned!");
 			}

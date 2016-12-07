@@ -7,7 +7,7 @@ public class Txid {
 		StringBuilder result = new StringBuilder();
 		Random rand = new Random();
 		for (int i = 0; i < NUM_BITS; i++) {
-			result.append(rand.nextInt(1));
+			result.append(rand.nextInt(2));
 		}
 		return result.toString();
 	}

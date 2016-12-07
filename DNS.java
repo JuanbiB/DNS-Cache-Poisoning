@@ -99,6 +99,7 @@ public class DNS implements Node {
         		}
             }
         	else {
+        		Log.i(TAG, "Got a request with wrong TXID.");
                 return;
             }
         }
@@ -118,6 +119,10 @@ public class DNS implements Node {
             		Log.i(TAG, "The following address tried to contact me, but I was not" +
         						" expecting it: " + src.getAddress());
             	}
+            }
+            else{
+            	Log.i(TAG, "Got a request with wrong TXID.");
+            	return;
             }
         }
     }
