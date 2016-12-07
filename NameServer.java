@@ -158,4 +158,8 @@ public class NameServer implements Node {
 		return rightServer(query) && query.length() == type.length();
 	}
 	
+	public String getAddress(){
+		return address;
+	}
+	
 }

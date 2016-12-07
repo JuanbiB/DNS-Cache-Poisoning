@@ -37,7 +37,7 @@ public class AttackSimulation {
 	public void attackSimulation() {
 		// Step (1): init pages for the client to visit
 		List<Url> pagesToVisit = new LinkedList<Url>();
-		pagesToVisit.add(new Url("www.oberlin.edu"));
+		pagesToVisit.add(new Url("www.oberlin.edu", "192.168.1.1"));
 
 		// Step (2): start an unfettered simulation in a thread
 		Target unfettered = new Target(pagesToVisit);
@@ -53,7 +53,7 @@ public class AttackSimulation {
 		new Attacker(unfettered.getSimulation().getDns(), 
 				unfettered.getSimulation().getRoot()).attack(
 						new Url("www.muwahaha.com", Url.MALICIOUS_ADDRESS));
-	}
+		}
 
 	public static void main(String[] args) {
 		new AttackSimulation().attackSimulation();

@@ -33,7 +33,10 @@ public class Simulation {
 		init();
 		
 		for (Url url : pagesToVisit) {
-			client.visitWebPage(url);
+			String answer = client.visitWebPage(url);
+			if (!answer.equals(url.getAddress())){
+				Log.i("Simulation", "Cache has been poisoned!");
+			}
 		}
 	}
 
@@ -52,7 +55,7 @@ public class Simulation {
 	public static void main(String[] args) {
 		System.out.println("---------- Unfettered Simulation ----------");
 		List<Url> pagesToVisit = new LinkedList<Url>();
-		pagesToVisit.add(new Url("www.oberlin.edu"));
+		pagesToVisit.add(new Url("www.oberlin.edu", "192.168.1.1"));
 		new Simulation(pagesToVisit, "addresses.txt").unfettered();
 		System.out.println("---------- Unfettered Simulation End -------");
 		

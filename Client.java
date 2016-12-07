@@ -19,7 +19,6 @@ public class Client implements Node {
     		makeRequest(query);
     		address = cache_.lookupEntry(query);
     	}
-    	
     	return address;
     }
 
@@ -60,5 +59,9 @@ public class Client implements Node {
 		Message request = new Message(query, TXID);
 		dns_.message(this, request);
     }
+    
+    public String getAddress(){
+		return "";
+	}
 }
 
