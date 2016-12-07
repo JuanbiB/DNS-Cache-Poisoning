@@ -89,7 +89,6 @@ public class NameServer implements Node {
 		}
 		
 		Url query = message.getQuery();
-		Log.i(TAG, "Received message to search up: " + query.toString());
 		// skip if not trusted server, invalid message, or wrong name server
 		if (!trustedServers.contains(src) || message.getType() != MessageTypes.WHERE ||
 				!rightServer(query)) {
@@ -99,13 +98,14 @@ public class NameServer implements Node {
 		
 		// check if we are the final server for this query
 		if (matches(query)) {
+			Log.i(TAG, "Found final server.");
 			src.message(this, new Message(query, address(query), message.getTXID()));
 			return;
 		}
 		
 		// return next server
 		String nextServer = nextServer(query);
-		Log.i(TAG, "Next server to search: " + nextServer);
+		Log.i(TAG, "Next name server to ask: " + nextServer + "\nWhole Domain: " + query.toString());
 		if (!children.containsKey(nextServer)) {
 			// skip if not a child
 			return;

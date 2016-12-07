@@ -43,8 +43,8 @@ public class Client implements Node {
 		// Check that this is indeed a final answer from the DNS
 		if (message.getType() == MessageTypes.FINAL){
 		    // Add entry to cache
-			Log.i(TAG, "Adding the following to cache: " + message.getQuery().toString() + 
-					" - " + message.getAnswer());
+			Log.i(TAG, "Adding the following to cache: " + "{" + message.getQuery().toString() + 
+					" : " + message.getAnswer() + "}");
 		    cache_.addEntry(message.getQuery(), message.getAnswer());
 		}
 		else {
