@@ -6,6 +6,8 @@ public class Cache {
 
 	private Map<Url, String> cache;
 	private Map<TTL, Url> ttls;
+	private boolean purging = false;
+	private boolean entering = false;
 
 	/*
 	 * Initializes the cache and
@@ -15,29 +17,8 @@ public class Cache {
 		this.cache = new HashMap<Url, String>();
 		this.ttls = new HashMap<TTL, Url>();
 
-		new Date().getTime();
-
 		// start a new thread that will continuously purge obsolete cache entries
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
-					for (TTL ttl : ttls.keySet()) {
-						if (getCurrentTime() >= ttl.getExpTime()) {
-							Url expired = ttls.get(ttl);
-							cache.remove(expired);
-							ttls.remove(ttl);
-						}
-					}
-					// Only do this once per second
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						run();
-					}
-				}
-			}
-		}).start();
+		new Thread(new CachePurger(this)).start();
 	}
 
 	/*
@@ -45,9 +26,22 @@ public class Cache {
 	 * Takes as input a query, address, and ttl in milliseconds
 	 */
 	public void addEntry(Url query, String address, long millis) {
+		this.entering = true;
+		sleepUntilUnset(purging);
 		TTL ttl = new TTL(millis);
 		cache.put(query, address);
 		ttls.put(ttl, query);
+		this.entering = false;
+	}
+	
+	public void sleepUntilUnset(boolean param) {
+		while (!param) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void addEntry(Url query, String address) {
@@ -88,6 +82,37 @@ public class Cache {
 	 */
 	long genTTL(long millis) {
 		return new Date().getTime() + millis;
+	}
+
+	// purges expired entries from the cache periodically
+	class CachePurger implements Runnable {
+		private Cache master;
+		
+		public CachePurger(Cache cache) {
+			this.master = cache;
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				master.purging = true;
+				sleepUntilUnset(entering);
+				for (TTL ttl : ttls.keySet()) {
+					if (getCurrentTime() >= ttl.getExpTime()) {
+						Url expired = ttls.get(ttl);
+						cache.remove(expired);
+						ttls.remove(ttl);
+					}
+				}
+				master.purging = false;
+				// Only do this once per second
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					run();
+				}
+			}
+		}
 	}
 
 }
