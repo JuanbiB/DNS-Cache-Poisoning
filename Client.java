@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Client implements Node {
     
 	private static final String TAG = "Client";	
@@ -57,7 +55,6 @@ public class Client implements Node {
      */
     public void makeRequest(Url query){
 		// If not in cache, send request and wait for reply
-		Random rand = new Random();
 		String TXID = Txid.genTxid();
 		
 		Message request = new Message(query, TXID);

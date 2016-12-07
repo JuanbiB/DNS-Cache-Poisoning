@@ -51,9 +51,7 @@ public class Cache {
 	}
 
 	public void addEntry(Url query, String address) {
-		TTL ttl = new TTL();
-		cache.put(query, address);
-		ttls.put(ttl, query);
+		addEntry(query, address, TTL.DEFAULT_TTL);
 	}
 
 	/*

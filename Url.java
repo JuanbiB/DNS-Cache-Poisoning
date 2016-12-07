@@ -1,9 +1,5 @@
-import java.util.Arrays;
-
-
 public class Url {
 
-	private static final String TAG = "Url";
 	private String raw;
 	private String[] url;
 	private int first;
@@ -12,7 +8,7 @@ public class Url {
 	private String address;
 	
 	// a malicious address for use by an attacker
-	public static final String MALICIOUS_ADDRESS = "342.532.343.235";
+	public static final String MALICIOUS_ADDRESS = "111.111.111.111";
 	
 	public Url(String url) {
 		this(url, "");

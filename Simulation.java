@@ -8,25 +8,43 @@ public class Simulation {
 	private List<Url> pagesToVisit;
 	private String knownWebPages;
 	private Client client;
+	private NameServer root;
+	private DNS dns;
+	private boolean ready = false;
 
 	public Simulation(List<Url> pagesToVisit, String knownWebPages) {
 		this.pagesToVisit = pagesToVisit;
 		this.knownWebPages = knownWebPages;
+	}
+	
+	public NameServer getRoot() {
+		return root;
+	}
+	
+	public DNS getDns() {
+		return dns;
+	}
+
+	public boolean isReady() {
+		return ready;
 	}
 
 	public void unfettered() {
 		init();
 		
 		for (Url url : pagesToVisit) {
-			String result = client.visitWebPage(url);
+			client.visitWebPage(url);
 		}
 	}
 
 	private void init() {
 		DNS dns = new DNS();
+		this.dns = dns;
 		Set<Node> dnsServers = new HashSet<Node>();
 		dnsServers.add(dns);
 		NameServer rootNS = new NameServer(knownWebPages, dnsServers, "128.532.543.645");
+		this.root = rootNS;
+		this.ready = true;
 		dns.init(rootNS);
 		this.client = new Client(dns);
 	}
