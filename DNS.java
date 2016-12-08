@@ -64,7 +64,9 @@ public class DNS implements Node {
 			e.printStackTrace();
 		}
     	
-    	Log.i(TAG, "Received a message of type: " + message.getType());
+    	if (message.getTXID() == this.TXID_) {
+    		Log.i(TAG, "Received a message of type: " + message.getType());
+    	}
     	
     	// If the requested Url is already contained within the cache, send that one back
         if (cache_.containsEntry(message.getQuery())){

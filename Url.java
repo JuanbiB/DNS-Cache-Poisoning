@@ -9,6 +9,7 @@ public class Url {
 	
 	// a malicious address for use by an attacker
 	public static final String MALICIOUS_ADDRESS = "111.111.111.111";
+	public static final String OBERLIN_ADDRESS = "192.168.1.1";
 	
 	public Url(String url) {
 		this(url, "");
@@ -30,6 +31,10 @@ public class Url {
 	
 	public boolean isEmpty() {
 		return url.length == 0;
+	}
+	
+	public boolean isMalicious() {
+		return this.address.equals(Url.MALICIOUS_ADDRESS);
 	}
 
 	public String first() {

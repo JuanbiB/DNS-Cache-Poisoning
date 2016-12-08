@@ -15,6 +15,7 @@ public class Simulation {
 	public Simulation(List<Url> pagesToVisit, String knownWebPages) {
 		this.pagesToVisit = pagesToVisit;
 		this.knownWebPages = knownWebPages;
+		init();
 	}
 	
 	public NameServer getRoot() {
@@ -30,8 +31,6 @@ public class Simulation {
 	}
 
 	public void unfettered() {
-		init();
-		
 		for (Url url : pagesToVisit) {
 			String answer = client.visitWebPage(url);
 			System.out.println("\tClient received successful IP!");
@@ -59,7 +58,5 @@ public class Simulation {
 		pagesToVisit.add(new Url("www.oberlin.edu", "192.168.1.1"));
 		new Simulation(pagesToVisit, "addresses.txt").unfettered();
 		System.out.println("---------- Unfettered Simulation End -------");
-		
-		System.out.println("---------- Cache Poisoning Simulation ----------");
 	}
 }

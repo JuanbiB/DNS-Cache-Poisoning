@@ -61,7 +61,7 @@ public class Client implements Node {
     }
     
     public String getAddress(){
-		return "";
+		return "333.333.333.333";
 	}
 }
 

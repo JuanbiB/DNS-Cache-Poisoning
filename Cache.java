@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cache {
+	// TODO: cache tag in constructor, simulation that uses ttls
 
 	private Map<Url, String> cache;
 	private Map<TTL, Url> ttls;
@@ -29,8 +30,10 @@ public class Cache {
 		this.entering = true;
 		sleepUntilUnset(purging);
 		TTL ttl = new TTL(millis);
-		cache.put(query, address);
-		ttls.put(ttl, query);
+		if (!cache.containsKey(query)) {
+			cache.put(query, address);
+			ttls.put(ttl, query);
+		}
 		this.entering = false;
 	}
 	
