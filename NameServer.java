@@ -92,7 +92,6 @@ public class NameServer implements Node {
 		// skip if not trusted server, invalid message, or wrong name server
 		if (!trustedServers.contains(src) || message.getType() != MessageTypes.WHERE ||
 				!rightServer(query)) {
-			System.out.println("doesn't contain key");
 			return;
 		}
 		

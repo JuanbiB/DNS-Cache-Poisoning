@@ -76,9 +76,13 @@ public class DNS implements Node {
     	
     	// If the requested Url is already contained within the cache, send that one back
         if (cache_.containsEntry(message.getQuery())){
-        	Url query = message.getQuery();
-        	Message toSend = new Message(query, cache_.lookupEntry(query), message.getTXID());
-            src.message(this, toSend);
+        	if (message.getType() == MessageTypes.WHERE) {
+        		Url query = message.getQuery();
+            	Message toSend = new Message(query, cache_.lookupEntry(query), message.getTXID());
+                src.message(this, toSend);
+        	} else {
+        		return;
+        	}
         }
         // This is the initial message received by the client	
         if (message.getType()==MessageTypes.WHERE){
@@ -117,7 +121,7 @@ public class DNS implements Node {
         		}
             }
         	else {
-        		Log.i(TAG, "Got a request with wrong TXID.");
+        		//Log.i(TAG, "Got a request with wrong TXID.");
                 return;
             }
         }

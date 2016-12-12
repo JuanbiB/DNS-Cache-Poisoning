@@ -70,6 +70,7 @@ public class AttackSimulation {
 				e.printStackTrace();
 			}
 		}
+		Log.enabled = true;
 		unfettered.run();
 	}
 

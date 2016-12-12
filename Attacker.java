@@ -34,6 +34,7 @@ public class Attacker implements Node {
 
 		public void run() {
 			while (!successful) {
+				Log.i(TAG, "Sending a request for " + legitimite.getAddress());
 				String TXID = Txid.genTxid();
 				Message request = new Message(legitimite, TXID);
 				target.message(attacker, request);
@@ -45,6 +46,7 @@ public class Attacker implements Node {
 		
 		public void run() {
 			while (!successful) {
+				Log.i(TAG, "Sending a fake response, spoofing authoritative name server.");
 				Message response = createFakeResponse(malicious);
 				target.message(authoritative, response);
 			}
@@ -67,7 +69,8 @@ public class Attacker implements Node {
 	@Override
 	public void message(Node src, Message message) {
 		if (message.getType() == MessageTypes.FINAL) {
-			if (message.getAnswer() == malicious.getAddress()) {
+			if (message.getAnswer().equals(malicious.getAddress())) {
+				//Log.enabled = false;
 				this.successful = true;
 			}
 		}
