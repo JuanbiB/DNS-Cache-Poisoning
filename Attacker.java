@@ -1,16 +1,16 @@
 public class Attacker implements Node {
 
 	private DNS target;
-	private NameServer root;
+	private NameServer authoritative;
 	private boolean successful;
 	private Url malicious;
 	private Url legitimite;
 	
 	public static final String TAG = "Attacker";
 	
-	public Attacker(DNS target, NameServer root) {
+	public Attacker(DNS target, NameServer authoritative) {
 		this.target = target;
-		this.root = root;
+		this.authoritative = authoritative;
 	}
 	
 	public void attack(Url fake, Url legitimite) {
@@ -18,10 +18,9 @@ public class Attacker implements Node {
 		this.legitimite = legitimite;
 		
 		// send requests and spoofed responses until successful
-		new Thread(new Response()).start();
-		
 		while (!successful) {
 			new Thread(new Request(this)).start();
+			new Thread(new Response()).start();
 		}
 	}
 	
@@ -45,11 +44,14 @@ public class Attacker implements Node {
 	class Response implements Runnable {
 		
 		public void run() {
-			
+			while (!successful) {
+				Message response = createFakeResponse(malicious);
+				target.message(authoritative, response);
+			}
 		}
 	}
 
-	private Message createFakeMessage(Url fake) {
+	private Message createFakeResponse(Url fake) {
 		Message message = new Message(new Url(fake.getRaw()), fake.getAddress(), genTxid());
 		return message;
 	}
