@@ -54,9 +54,7 @@ public class Client implements Node {
      */
     public void makeRequest(Url query){
 		// If not in cache, send request and wait for reply
-		String TXID = Txid.genTxid();
-		
-		Message request = new Message(query, TXID);
+		Message request = new Message(query);
 		dns_.message(this, request);
     }
     

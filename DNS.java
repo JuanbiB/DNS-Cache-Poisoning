@@ -1,14 +1,18 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DNS implements Node {
     //Instance Variables: Root name server and cache
 	private static final String TAG = "DNS";	
     private NameServer root_;
     private Cache cache_;
-    private String TXID_;
     private Node client_;
     private Map<String, Integer> expectedServers_;
+    private Set<String> TXIDS_;
+    private final ReentrantLock lock_;
 
     /**
      * Constructor for DNS server object.
@@ -17,6 +21,8 @@ public class DNS implements Node {
     public DNS() {
         cache_ = new Cache();
         expectedServers_ = new HashMap<String, Integer>();
+        TXIDS_ = new HashSet<String>();
+        lock_ = new ReentrantLock();
     }
     
     public void init(NameServer root){
@@ -64,7 +70,7 @@ public class DNS implements Node {
 			e.printStackTrace();
 		}
     	
-    	if (message.getTXID() == this.TXID_) {
+    	if (TXIDS_.contains(message.getTXID())) {
     		Log.i(TAG, "Received a message of type: " + message.getType());
     	}
     	
@@ -76,7 +82,17 @@ public class DNS implements Node {
         }
         // This is the initial message received by the client	
         if (message.getType()==MessageTypes.WHERE){
-            this.TXID_ = message.getTXID();
+        	Log.i(TAG, "Received a message of type: " + message.getType());
+        	
+        	String TXID = Txid.genTxid();
+        	lock_.lock();
+        	while (TXIDS_.contains(TXID)){
+        		TXID = Txid.genTxid();
+        	}
+        	TXIDS_.add(TXID);
+        	lock_.unlock();
+
+        	message.setTXID(TXID);
             this.client_ = src;
             
             // Now expecting a message back from root
@@ -86,14 +102,14 @@ public class DNS implements Node {
         }
         // If a NS returns another NS to ask and check that we're expecting an answer
         if (message.getType()==MessageTypes.TRY) {
-        	if (message.getTXID()==this.TXID_) {
+        	if (TXIDS_.contains(message.getTXID())) {
         		if (expectedServers_.get(src.getAddress()) > 0){
         			NameServer nextServer = message.getNextServer();
         			// Got message back from expected server, add next to the map 
         			decrementExpected(src.getAddress());
         			addToExpected(nextServer.getAddress());
         		
-                	nextServer.message(this, new Message(message.getQuery(), this.TXID_));
+                	nextServer.message(this, new Message(message.getQuery(), message.getTXID()));
         		}
         		else{
         			Log.i(TAG, "The following address tried to contact me, but I was not" +
@@ -108,7 +124,7 @@ public class DNS implements Node {
         // If we get the final answer from the name server, that is, an IP address
         if (message.getType() == MessageTypes.FINAL){
             // Add entry to cache	
-            if (message.getTXID().equals(this.TXID_)){
+            if (TXIDS_.contains(message.getTXID())){
             	if (expectedServers_.get(src.getAddress()) > 0){
             		Log.i(TAG, "Adding the following to cache: " + "{" + message.getQuery() + 
             				":" + message.getAnswer() + "}");
@@ -116,9 +132,12 @@ public class DNS implements Node {
             		decrementExpected(src.getAddress());
                 	this.cache_.addEntry(message.getQuery(), message.getAnswer());
                  	this.client_.message(this, message);
+                 	lock_.lock();
+                 	TXIDS_.remove(message.getTXID());
+                 	lock_.unlock();
             	}
             	else{
-            		Log.i(TAG, "The following address tried to contact me, but I was not" +
+            		Log.i(TAG, "The following address tried to contact me, but I was not" +	// 
         						" expecting it: " + src.getAddress());
             	}
             }

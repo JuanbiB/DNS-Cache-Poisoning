@@ -25,6 +25,11 @@ public class Message {
 		this.query = query;
 		this.TXID = TXID;
 	}
+	
+	public Message(Url query) {
+		this.type = MessageTypes.WHERE;
+		this.query = query;
+	}
 
 	public String getType() {
 		return type;
@@ -60,5 +65,9 @@ public class Message {
 	
 	public String getTXID(){
 		return this.TXID;
+	}
+	
+	public void setTXID(String txid){
+		this.TXID = txid;
 	}
 }
