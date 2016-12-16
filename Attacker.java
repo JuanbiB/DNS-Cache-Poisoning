@@ -72,6 +72,7 @@ public class Attacker implements Node {
 			if (message.getAnswer().equals(malicious.getAddress())) {
 				//Log.enabled = false;
 				this.successful = true;
+				//System.exit(1);
 			}
 		}
 	}

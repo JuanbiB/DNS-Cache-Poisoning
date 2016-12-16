@@ -60,6 +60,11 @@ public class AttackSimulation {
 		Log.i(TAG, "Initializing the attacker.");
 		Attacker attacker = new Attacker(unfettered.getSimulation().getDns(), 
 				unfettered.getSimulation().getRoot());
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		attacker.attack(new Url("www.muwahaha.com", Url.MALICIOUS_ADDRESS), new Url("www.oberlin.edu", Url.OBERLIN_ADDRESS));
 	
 		// Step (4): an unsuspecting client tries to visit
@@ -71,7 +76,8 @@ public class AttackSimulation {
 			}
 		}
 		Log.enabled = true;
-		unfettered.run();
+		
+		//unfettered.run();
 	}
 
 	public static void main(String[] args) {

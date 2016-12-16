@@ -1,7 +1,7 @@
 
 public class TTL {
 	private long expirationTime;
-	public static final long DEFAULT_TTL = 10000;
+	public static final long DEFAULT_TTL = 100000;
 	
 	public TTL() {
 		this.expirationTime = DEFAULT_TTL;
