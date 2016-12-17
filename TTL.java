@@ -1,3 +1,4 @@
+import java.util.Date;
 
 public class TTL {
 	private long expirationTime;
@@ -8,7 +9,7 @@ public class TTL {
 	}
 
 	public TTL(long millis) {
-		this.expirationTime = millis;
+		this.expirationTime = millis + new Date().getTime();
 	}
 	
 	public long getExpTime() {

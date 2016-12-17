@@ -75,9 +75,8 @@ public class AttackSimulation {
 				e.printStackTrace();
 			}
 		}
-		Log.enabled = true;
 		
-		//unfettered.run();
+		unfettered.run();
 	}
 
 	public static void main(String[] args) {
